@@ -1,0 +1,82 @@
+{
+  "name": "cmon51-debugadapter",
+  "version": "1.0.0",
+  "description": "Debug Adapter Protocol implementation for CMON51",
+  "scripts": {
+    "build": "esbuild ./src/extension.ts --bundle --external:node-pty --external:vscode --format=cjs --platform=node --outfile=dist/extension.js",
+    "watch": "npm run -S build -- --sourcemap --sources-content=false --watch",
+    "package": "vsce package --target win32-x64",
+    "vscode:prepublish": "npm run -S build -- --minify",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onDebugResolve:CMON51"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ncarr/cmon51-debugadapter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "vscode": "^1.65.0"
+  },
+  "bugs": {
+    "url": "https://github.com/ncarr/cmon51-debugadapter/issues"
+  },
+  "homepage": "https://github.com/ncarr/cmon51-debugadapter#readme",
+  "dependencies": {
+    "node-pty": "^0.10.1"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.21",
+    "@types/vscode": "^1.65.0",
+    "@vscode/debugadapter": "^1.54.0",
+    "esbuild": "^0.14.27",
+    "strip-ansi": "^7.0.1",
+    "typescript": "^4.6.2",
+    "vsce": "^2.7.0"
+  },
+  "contributes": {
+    "breakpoints": [
+      {
+        "language": "8051"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "CMON51",
+        "languages": [
+          "8051"
+        ],
+        "label": "CMON51",
+        "program": "./out/adapter.js",
+        "runtime": "node",
+        "configurationAttributes": {
+          "launch": {
+            "properties": {}
+          }
+        },
+        "initialConfigurations": [
+          {
+            "name": "Debug Assembly",
+            "type": "CMON51",
+            "request": "launch"
+          }
+        ],
+        "configurationSnippets": [
+          {
+            "label": "CMON51 Debug: Launch",
+            "description": "Launch a debugging session on the CV-8052",
+            "body": {
+              "name": "Debug Assembly",
+              "type": "CMON51",
+              "request": "launch"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

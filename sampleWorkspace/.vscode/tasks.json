@@ -1,0 +1,53 @@
+{
+    "version": "2.0.0",
+    "options": {
+      "env": {
+        // Modify this path to match the install location for CrossIDE on your system
+        // Don't include trailing slashes
+        "CROSSIDE_PATH": "C:\\CrossIDE"
+      }
+    },
+  
+    // NO NEED TO EDIT ANYTHING BELOW HERE
+    "tasks": [
+      {
+        "label": "Assemble (A51)",
+        "type": "shell",
+        "command": "& \\\"$env:CROSSIDE_PATH\\Call51\\Bin\\a51.exe\\\" \\\"${file}\\\"",
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "problemMatcher": [{
+          "owner": "8051",
+          "fileLocation": "absolute",
+          "pattern":[
+            {
+              "regexp": "^(.*):(\\d+):\\ (.*):\\ (.*)$",
+              "file": 1,
+              "location": 2,
+              "severity": 3,
+              "message": 4
+            }
+          ]
+        }]
+      },
+      {
+        "label": "Flash (Quartus SignalTap II)",
+        "type": "shell",
+        "command": "& \\\"$env:QUARTUS_ROOTDIR\\bin64\\quartus_stp.exe\\\" -t $env:CROSSIDE_PATH\\Load_Script.tcl \\\"${fileDirname}\\${fileBasenameNoExtension}.hex\\\"",
+        "group": {
+          "kind": "test",
+          "isDefault": true
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Debug (CMON51)",
+        "type": "shell",
+        "command": "& \\\"$env:QUARTUS_ROOTDIR\\bin64\\quartus_stp.exe\\\" -t \\\"$env:CROSSIDE_PATH\\cmon51.tcl\\\"",
+        "problemMatcher": []
+      }
+    ]
+  }
+  
